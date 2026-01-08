@@ -58,6 +58,9 @@ const connection=mysql.createConnection({
 
 // let form=document.querySelector("#atif");
 // console.log(form.innerText);
+app.get("/" , (req , res) =>{
+  res.render("index.html")
+})
 app.get('/ad',(req,res)=>{
   // const password="1234"
 
