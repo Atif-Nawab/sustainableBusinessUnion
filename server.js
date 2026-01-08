@@ -59,17 +59,17 @@ const connection=mysql.createConnection({
 // let form=document.querySelector("#atif");
 // console.log(form.innerText);
 app.get('/ad',(req,res)=>{
-  const password="1234"
+  // const password="1234"
 
-  console.log(req.query.password)
-  let pass=req.query.password;
+  // console.log(req.query.password)
+  // let pass=req.query.password;
   console.log(pass)
-  if(pass==password)
+  // if(pass==password)
   res.redirect("adminPage.html");
-  else{
-    alert("Wrong Password! Access Denied");
-    res.send("<h1>error</h1>");
-  }
+  // else{
+  //   alert("Wrong Password! Access Denied");
+  //   res.send("<h1>error</h1>");
+  // }
 })
 
 
