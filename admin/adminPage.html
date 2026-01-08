@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Event Admin Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+
+  <div class="app">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>Admin Panel</h2>
+      <nav>
+        <a class="active">Dashboard</a>
+        <a>Add Event</a>
+        <a>Events</a>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+
+      <!-- Header -->
+      <header class="header">
+        <h1>Event Dashboard</h1>
+      </header>
+
+      <!-- Add Event -->
+      <section class="card">
+        <h2>Add New Event</h2>
+
+        <form id="eventForm">
+          <div class="grid">
+            <input type="text" name="title" id="title" placeholder="Event Title" required />
+            <input type="text" name="artists" id="artists" placeholder="Artists / Acts" required />
+            <input type="date" name="date" id="date" required placeholder="Date" />
+            <input type="time" name="time" id="time" placeholder="Time" required />
+            <input type="text" name="location" id="location" placeholder="Location" required />
+          </div>
+
+          <button type="submit">Add Event</button>
+        </form>
+      </section>
+
+      <!-- Events List -->
+      <section class="card">
+        <h2 id="atif">All Events</h2>
+
+        <table id="eventTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Event</th>
+              <th>Artists</th>
+              <th>Location</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody id="eventData"></tbody>
+        </table>
+      </section>
+
+      <div class="card">
+  <h2>Public Site Theme</h2>
+
+  <div class="grid">
+    <h4>Choose primary color</h4>
+    <input type="color" id="primary" title="Primary color">
+     <h4>Choose secondry color</h4>
+    <input type="color" id="secondary" title="Secondary color">
+  </div>
+
+  <button onclick="updatePublicTheme()">Update Public Theme</button>
+</div>
+
+
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="./index2.js"></script>
+
+
+  <!-- <script src="./adminThemeUpdate.js"></script> -->
+</body>
+</html>

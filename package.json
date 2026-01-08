@@ -1,0 +1,18 @@
+{
+  "name": "adding-features",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000s\u0000b\u0000u\u0000\r\u0000 \u0000",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "admin.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "axios": "^1.13.2",
+    "ejs": "^3.1.10",
+    "express": "^5.2.1",
+    "mysql2": "^3.16.0"
+  }
+}
