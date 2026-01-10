@@ -124,7 +124,6 @@
 
 
 // Code for both local and vercel 
-
 const express = require("express");
 const mysql = require("mysql2");
 const path = require("path");
@@ -134,14 +133,13 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const app = express();
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "admin")));
 
-// ✅ CREATE POOL (NOT connection)
+// ✅ CREATE POOL
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -156,10 +154,9 @@ const pool = mysql.createPool({
   }
 });
 
-
 // ROUTES
 app.get("/", (req, res) => {
-  res.send("this is from server");
+  res.sendFile(path.join(__dirname, "public", "index.html"))
 });
 
 app.get("/ad", (req, res) => {
@@ -193,11 +190,10 @@ app.post("/addEvent", (req, res) => {
   });
 });
 
-// LOCAL ONLY
-if (process.env.NODE_ENV !== "production") {
-  app.listen(3000, () => {
-    console.log("Local server running on http://localhost:3000");
-  });
-}
+// ✅ Listen on Railway or locally
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
 module.exports = app;
