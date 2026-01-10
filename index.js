@@ -159,7 +159,7 @@ const pool = mysql.createPool({
 
 // ROUTES
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.send("this is from server");
 });
 
 app.get("/ad", (req, res) => {
