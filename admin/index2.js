@@ -84,7 +84,7 @@ document.getElementById("eventForm").addEventListener("submit", function (e) {
     location: document.getElementById("location").value
   };
 console.log(data.date);
-  axios.post("http://localhost:3000/addEvent", data)
+  axios.post("/addEvent", data)
     .then(res => {
       alert("Event added!");
       this.reset();
