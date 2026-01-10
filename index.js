@@ -125,76 +125,75 @@
 
 // Code for both local and vercel 
 
-
 const express = require("express");
 const mysql = require("mysql2");
 const path = require("path");
 
-// ✅ Load env only locally
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
 const app = express();
 
-// middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
-app.use(express.static("admin"));
 
-app.use("/public", express.static(path.join(process.cwd(), "public")));
-app.use("/admin", express.static(path.join(process.cwd(), "admin")));
-// ✅ DB connection (works everywhere)
-const connection = mysql.createConnection({
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "admin")));
+
+// ✅ CREATE POOL (NOT connection)
+const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   database: process.env.DB_NAME,
   password: process.env.DB_PASS,
-  dateStrings: true
+  dateStrings: true,
+  waitForConnections: true,
+  connectionLimit: 5,
+  queueLimit: 0
 });
 
-// routes
+// ROUTES
 app.get("/", (req, res) => {
-  res.sendFile(path.join(process.cwd(), "public/index.html"));
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 app.get("/ad", (req, res) => {
-  res.sendFile(path.join(process.cwd(), "admin/adminPage.html"));
+  res.sendFile(path.join(__dirname, "admin", "adminPage.html"));
+});
+
+app.get("/getEvents", (req, res) => {
+  pool.query("SELECT * FROM events ORDER BY dates", (err, result) => {
+    if (err) {
+      console.error("DB ERROR:", err);
+      return res.status(500).json({ error: "Database error" });
+    }
+    res.json(result);
+  });
 });
 
 app.post("/addEvent", (req, res) => {
   const { title, artists, date, time, location } = req.body;
 
-  const q = `
+  const sql = `
     INSERT INTO events (title, artists, dates, time, location)
     VALUES (?, ?, ?, ?, ?)
   `;
 
-  connection.query(q, [title, artists, date, time, location], (err) => {
-    if (err) return res.status(500).json({ error: err.message });
+  pool.query(sql, [title, artists, date, time, location], (err) => {
+    if (err) {
+      console.error("INSERT ERROR:", err);
+      return res.status(500).json({ error: "Insert failed" });
+    }
     res.json({ message: "Event added successfully" });
   });
 });
 
-app.get("/getEvents", (req, res) => {
-  connection.query(
-    "SELECT * FROM events ORDER BY dates",
-    (err, result) => {
-      if (err) return res.status(500).json({ error: err.message });
-      res.json(result);
-    }
-  );
-});
-
-
-// ✅ ONLY listen locally
+// LOCAL ONLY
 if (process.env.NODE_ENV !== "production") {
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
-    console.log(`Local server running on http://localhost:${PORT}`);
+  app.listen(3000, () => {
+    console.log("Local server running on http://localhost:3000");
   });
 }
 
-// ✅ Export for Vercel
 module.exports = app;
