@@ -143,6 +143,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(express.static("admin"));
 
+app.use("/public", express.static(path.join(process.cwd(), "public")));
+app.use("/admin", express.static(path.join(process.cwd(), "admin")));
 // ✅ DB connection (works everywhere)
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
