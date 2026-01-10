@@ -3,6 +3,8 @@
 
 // const { default: axios } = require("axios");
 
+// const { default: axios } = require("axios");
+
 // // let events = JSON.parse(localStorage.getItem("events")) || [];
 
 // // function saveEvents() {
@@ -55,20 +57,36 @@
 
 
 
-// function updatePublicTheme() {
-//   const primary = document.getElementById("primary").value;
-//   const secondary = document.getElementById("secondary").value;
+function updatePublicTheme() {
+  let colorData={
+    primaryColor: document.getElementById("primary").value,
+   secondaryColor: document.getElementById("secondary").value,
+  otherColor: document.getElementById("other").value
+  }
+  console.log(colorData)
 
-//   fetch("/update-public-theme", {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify({ primary, secondary })
-//   })
-//   .then(() => alert("Public theme updated"))
-//   .catch(err => console.error(err));
-// }
+  axios.post("/update-public-theme",colorData) 
+  .then(() => alert("Public theme updated"))
+  .catch(err => console.error(err));
+}
 
-
+function updatePageTitle(){
+  const titleData={
+    heroTitle:document.getElementById("heroTitle").value.trim(),
+  heroSubTitle:document.getElementById("heroSubTitle").value.trim()
+}
+  if (!heroTitle || !heroSubTitle) {
+    alert("Both title and subtitle are required");
+    return;
+  }
+  axios.post("/addHeroTitle",titleData)
+  .then(result=>{
+    console.log(result);
+  })
+  .catch(err=>{
+    console.log(err);
+  })
+}
 
 // import axios from 'axios';
 console.log("loging")

@@ -119,3 +119,34 @@ innerDiv.insertAdjacentElement("afterend",ticketBtn);
 eventsPanel.appendChild(outerDiv);
 }
 
+
+
+function themeupdate(){
+  axios.get("/getColors")
+  .then(result=>{
+    console.log(result.data)
+
+    const root = document.documentElement;
+    root.style.setProperty("--primary", result.data.primaryColor);
+    root.style.setProperty("--secondary", result.data.secondaryColor);
+    root.style.setProperty("--primary-dark", result.data.primaryDark);
+  })
+  .catch(err=>{
+    console.log(err)
+  })
+}
+themeupdate();
+
+
+function titleChanger(){
+  axios.get("/getTitle")
+  .then(result=>{
+    document.querySelector(".hero-title-main").innerText=`${result.data.heroTitle}`;
+    document.querySelector(".hero-subtitle").innerText=`${result.data.heroSubTitle}`;
+  })
+  .catch(err=>{
+    console.log(err);
+  })
+
+}
+titleChanger();

@@ -191,6 +191,64 @@ app.post("/addEvent", (req, res) => {
   });
 });
 
+
+app.post("/update-public-theme",(req,res)=>{
+  const {primaryColor,secondaryColor,otherColor}=req.body;
+ 
+  let sql=`UPDATE themecolor SET primarycolor=?,secondarycolor=?,primarydark=? WHERE ID=1`;
+  
+  pool.query(sql,[primaryColor,secondaryColor,otherColor],(err)=>{
+  if(err){
+    console.error("UPDATE ERROR:", err);
+      return res.status(500).json({ error: "Update failed" });
+  }
+  res.json({message:"Theme updated successfully"});
+  })
+})
+
+app.get("/getColors",(req,res)=>{
+
+  let sql="select * from themecolor";
+
+  pool.query(sql,(err,result)=>{
+    if(err){
+      console.error("ERROR:", err);
+      return res.status(500).json({ error: "Color loading failed" });
+    }
+    else
+      res.json(result[0]);
+      
+  })
+  
+
+})
+
+app.post("/addHeroTitle",(req,res)=>{
+  const {heroTitle,heroSubTitle}=req.body;
+
+  let sql="Update titlechanger set heroTitle=?, heroSubTitle=? where id=1";
+
+  pool.query(sql,[heroTitle,heroSubTitle],(err,result)=>{
+    if(err){
+      console.error("UPDATE ERROR:", err);
+      return res.status(500).json({ error: "Title updation failed" });
+    }
+    res.json({message:"Title updated successfully"});
+  })
+})
+
+app.get("/getTitle",(req,res)=>{
+  let sql="select * from titlechanger";
+
+  pool.query(sql,(err,result)=>{
+    if(err){
+      console.error("ERROR:", err);
+      return res.status(500).json({ error: "Title loading failed" });
+    }
+    res.json(result[0]);
+  })
+})
+
 // ✅ Listen on Railway or locally
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
