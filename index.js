@@ -150,8 +150,12 @@ const pool = mysql.createPool({
   dateStrings: true,
   waitForConnections: true,
   connectionLimit: 5,
-  queueLimit: 0
+  queueLimit: 0,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
+
 
 // ROUTES
 app.get("/", (req, res) => {
