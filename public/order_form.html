@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SBU Connect | Order Form – London 18 Jan 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="order_form.css">
+</head>
+
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>SBU CONNECT EVENT</h1>
+    <div class="event-details">
+      <strong>London | 18 January 2026</strong><br>
+      Sustainable Business Union<br>
+      📞 +44-7770-264-192 | 📧 info@sustainablebusinessunion.com
+    </div>
+  </div>
+
+  <div class="info-banner">
+    🎯 Complete this form to register for our networking event. Fields marked with * are required.
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressBar"></div>
+  </div>
+
+  <form id="secureForm" novalidate method="post" action = "/orderForm">
+
+    <!-- Honeypot -->
+    <input type="text" id="website" name="website" class="hidden" tabindex="-1" autocomplete="off">
+
+    <!-- Event Intent -->
+    <div class="section">
+      <div class="section-title">Event Intent</div>
+
+      <div class="form-group">
+        <label class="required">What are you looking for?</label>
+        <div class="options">
+          <label class="radio-label">
+            <input type="radio" name="intent" value="investor" required>
+            <span>Investor meeting founders</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="intent" value="founder">
+            <span>Founder meeting investors</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="intent" value="networking">
+            <span>Industry networking</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="intent" value="other">
+            <span>Other</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Company Details -->
+    <div class="section">
+      <div class="section-title">Company Details</div>
+
+      <div class="form-group">
+        <label class="required" for="company">Company Name</label>
+        <input type="text" id="company" name="company" required autocomplete="organization">
+        <div class="field-error" id="companyError">Please enter your company name</div>
+      </div>
+
+      <div class="form-group">
+        <label for="linkedin">LinkedIn Profile</label>
+        <input type="text" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourprofile" autocomplete="url">
+        <div class="help-text">Optional: Share your LinkedIn profile for better networking</div>
+        <div class="field-error" id="linkedinError">Please enter a valid LinkedIn URL</div>
+      </div>
+
+      <div class="form-group">
+        <label>Would you like a one-minute speaking slot?</label>
+        <div class="options">
+          <label class="radio-label">
+            <input type="radio" name="slot" value="yes">
+            <span>Yes, I'd like to speak</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="slot" value="no">
+            <span>No, thanks</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Information -->
+    <div class="section">
+      <div class="section-title">Contact Information</div>
+
+      <div class="form-group">
+        <label class="required" for="name">Full Name</label>
+        <input type="text" id="name" name="name" required autocomplete="name">
+        <div class="field-error" id="nameError">Please enter your full name</div>
+      </div>
+
+      <div class="form-group">
+        <label class="required" for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phone" placeholder="+44 123456789" required autocomplete="tel">
+        <div class="help-text">Include country code (e.g., +44 for UK)</div>
+        <div class="field-error" id="phoneError">Please enter a valid phone number (7-15 digits)</div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email">
+        <div class="field-error" id="emailError">Please enter a valid email address</div>
+      </div>
+
+      <div class="form-group">
+        <label class="required">Preferred Contact Method</label>
+        <div class="options">
+          <label class="radio-label">
+            <input type="radio" name="contact" value="phone" required>
+            <span>📞 Phone</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="contact" value="email">
+            <span>📧 Email</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Consent -->
+    <div class="section">
+      <div class="section-title">Privacy & Consent</div>
+
+      <div class="consent-wrapper">
+        <label class="checkbox-label">
+          <input type="checkbox" id="consent" name="consent" required>
+          <span class="consent-text">
+            By registering for and attending this event, you consent to being photographed and/or recorded. You grant us permission to use these images and recordings for promotional and communication purposes, including publication on our website and social media channels. You also consent to us sharing your relevant contact details with appropriate partners within our ecosystem to facilitate meaningful connections and follow-ups related to the event.
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button type="submit" id="submitBtn">
+        <span class="spinner"></span>
+        <span class="btn-text">Submit Registration</span>
+      </button>
+      <button type="reset" class="btn-reset">
+        <span>Clear Form</span>
+      </button>
+    </div>
+
+    <div class="success-message" id="successMsg">
+      <span style="font-size: 24px;">✓</span>
+      <span>Registration submitted successfully! We'll be in touch soon.</span>
+    </div>
+
+    <div class="error-message" id="errorMsg"></div>
+  </form>
+</div>
+
+<script>
+(() => {
+  const form = document.getElementById("secureForm");
+  const errorMsg = document.getElementById("errorMsg");
+  const successMsg = document.getElementById("successMsg");
+  const submitBtn = document.getElementById("submitBtn");
+  const progressBar = document.getElementById("progressBar");
+  const startTime = Date.now();
+
+  // Sanitize input
+  const sanitize = str => str.replace(/[<>"']/g, "");
+
+  // Validation functions
+  const validPhone = phone => /^[0-9+\-\s()]{7,20}$/.test(phone);
+  const validEmail = email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validURL = url => url === "" || /^https?:\/\/(www\.)?(linkedin\.com|lnkd\.in)\/.+/.test(url);
+
+  // Real-time validation
+  const validateField = (field, validator, errorElement) => {
+    const value = field.value.trim();
+    const isValid = validator(value);
+    
+    if (value && !isValid) {
+      field.classList.add("invalid");
+      field.classList.remove("valid");
+      errorElement.classList.add("show");
+      return false;
+    } else if (value && isValid) {
+      field.classList.remove("invalid");
+      field.classList.add("valid");
+      errorElement.classList.remove("show");
+      return true;
+    } else {
+      field.classList.remove("invalid", "valid");
+      errorElement.classList.remove("show");
+      return !field.required || value !== "";
+    }
+  };
+
+  // Setup field validation
+  const phoneField = document.getElementById("phone");
+  const emailField = document.getElementById("email");
+  const linkedinField = document.getElementById("linkedin");
+  const companyField = document.getElementById("company");
+  const nameField = document.getElementById("name");
+
+  phoneField.addEventListener("blur", () => 
+    validateField(phoneField, validPhone, document.getElementById("phoneError"))
+  );
+
+  emailField.addEventListener("blur", () => 
+    validateField(emailField, validEmail, document.getElementById("emailError"))
+  );
+
+  linkedinField.addEventListener("blur", () => 
+    validateField(linkedinField, validURL, document.getElementById("linkedinError"))
+  );
+
+  companyField.addEventListener("blur", () => {
+    const value = companyField.value.trim();
+    if (!value) {
+      companyField.classList.add("invalid");
+      document.getElementById("companyError").classList.add("show");
+    } else {
+      companyField.classList.remove("invalid");
+      companyField.classList.add("valid");
+      document.getElementById("companyError").classList.remove("show");
+    }
+  });
+
+  nameField.addEventListener("blur", () => {
+    const value = nameField.value.trim();
+    if (!value) {
+      nameField.classList.add("invalid");
+      document.getElementById("nameError").classList.add("show");
+    } else {
+      nameField.classList.remove("invalid");
+      nameField.classList.add("valid");
+      document.getElementById("nameError").classList.remove("show");
+    }
+  });
+
+  // Progress tracking
+  const updateProgress = () => {
+    const fields = form.querySelectorAll("input:required, input[type='radio']:checked, input[type='checkbox']:checked");
+    const requiredFields = form.querySelectorAll("input:required");
+    const radioGroups = [...new Set([...form.querySelectorAll("input[type='radio'][required]")].map(r => r.name))];
+    
+    let filled = 0;
+    let total = requiredFields.length - form.querySelectorAll("input[type='radio'][required]").length + radioGroups.length;
+    
+    // Count text inputs
+    form.querySelectorAll("input[type='text']:required, input[type='tel']:required").forEach(field => {
+      if (field.value.trim()) filled++;
+    });
+    
+    // Count radio groups
+    radioGroups.forEach(group => {
+      if (form.querySelector(`input[name="${group}"]:checked`)) filled++;
+    });
+    
+    // Count consent
+    if (document.getElementById("consent").checked) filled++;
+    
+    const progress = (filled / total) * 100;
+    progressBar.style.width = progress + "%";
+  };
+
+  form.addEventListener("change", updateProgress);
+  form.addEventListener("input", updateProgress);
+
+  // Form submission
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+
+    // Clear previous messages
+    errorMsg.classList.remove("show");
+    successMsg.classList.remove("show");
+    errorMsg.textContent = "";
+
+    // Bot detection: honeypot
+    if (document.getElementById("website").value !== "") {
+      return;
+    }
+
+    // Bot detection: time check (minimum 3 seconds)
+    if (Date.now() - startTime < 3000) {
+      errorMsg.textContent = "⚠️ Submission blocked. Please review the form carefully.";
+      errorMsg.classList.add("show");
+      return;
+    }
+
+    // Validate all fields
+    const phone = sanitize(phoneField.value.trim());
+    const email = sanitize(emailField.value.trim());
+    const linkedin = sanitize(linkedinField.value.trim());
+    const company = sanitize(companyField.value.trim());
+    const name = sanitize(nameField.value.trim());
+
+    if (!name) {
+      errorMsg.textContent = "⚠️ Please enter your full name.";
+      errorMsg.classList.add("show");
+      nameField.focus();
+      return;
+    }
+
+    if (!company) {
+      errorMsg.textContent = "⚠️ Please enter your company name.";
+      errorMsg.classList.add("show");
+      companyField.focus();
+      return;
+    }
+
+    if (!validPhone(phone)) {
+      errorMsg.textContent = "⚠️ Please enter a valid phone number (7-20 characters, including country code).";
+      errorMsg.classList.add("show");
+      phoneField.focus();
+      return;
+    }
+
+    if (email && !validEmail(email)) {
+      errorMsg.textContent = "⚠️ Please enter a valid email address.";
+      errorMsg.classList.add("show");
+      emailField.focus();
+      return;
+    }
+
+    if (linkedin && !validURL(linkedin)) {
+      errorMsg.textContent = "⚠️ Please enter a valid LinkedIn URL (must start with https://linkedin.com or https://lnkd.in).";
+      errorMsg.classList.add("show");
+      linkedinField.focus();
+      return;
+    }
+
+    if (!form.querySelector("input[name='intent']:checked")) {
+      errorMsg.textContent = "⚠️ Please select your event intent.";
+      errorMsg.classList.add("show");
+      return;
+    }
+
+    if (!form.querySelector("input[name='contact']:checked")) {
+      errorMsg.textContent = "⚠️ Please select your preferred contact method.";
+      errorMsg.classList.add("show");
+      return;
+    }
+
+    if (!document.getElementById("consent").checked) {
+      errorMsg.textContent = "⚠️ Please provide consent to continue.";
+      errorMsg.classList.add("show");
+      document.getElementById("consent").focus();
+      return;
+    }
+
+    // Submit form
+    submitBtn.disabled = true;
+    submitBtn.classList.add("loading");
+
+    // Simulate submission (replace with actual API call)
+    setTimeout(() => {
+      submitBtn.classList.remove("loading");
+      successMsg.classList.add("show");
+      form.reset();
+      progressBar.style.width = "0%";
+      
+      // Remove all validation classes
+      form.querySelectorAll(".valid, .invalid").forEach(el => {
+        el.classList.remove("valid", "invalid");
+      });
+
+      // Re-enable button after delay
+      setTimeout(() => {
+        submitBtn.disabled = false;
+        successMsg.classList.remove("show");
+      }, 5000);
+    }, 1500);
+  });
+
+  // Reset button
+  form.addEventListener("reset", () => {
+    setTimeout(() => {
+      updateProgress();
+      form.querySelectorAll(".valid, .invalid").forEach(el => {
+        el.classList.remove("valid", "invalid");
+      });
+      form.querySelectorAll(".field-error").forEach(el => {
+        el.classList.remove("show");
+      });
+      errorMsg.classList.remove("show");
+      successMsg.classList.remove("show");
+    }, 10);
+  });
+})();
+</script>
+
+</body>
+</html>

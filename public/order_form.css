@@ -1,0 +1,374 @@
+
+:root {
+  --primary: #0f4c81;
+  --primary-dark: #0a3a63;
+  --accent: #1a73e8;
+  --accent-light: #e3f2fd;
+  --success: #28a745;
+  --error: #c62828;
+  --bg: #f4f6f9;
+  --border: #dcdfe3;
+  --text: #1f2937;
+  --text-light: #6b7280;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 20px 0;
+}
+
+.container {
+  max-width: 760px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.15);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 24px;
+    margin: 0 16px;
+  }
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 36px;
+  padding-bottom: 24px;
+  border-bottom: 3px solid var(--primary);
+}
+
+h1 {
+  margin: 0 0 12px 0;
+  font-size: 28px;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.event-details {
+  font-size: 15px;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+.event-details strong {
+  color: var(--text);
+}
+
+.progress-bar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-bottom: 32px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.section {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: #fafbfc;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-title::before {
+  content: "";
+  width: 4px;
+  height: 20px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.required::after {
+  content: " *";
+  color: var(--error);
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 6px;
+  border: 2px solid var(--border);
+  font-size: 15px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+input[type="text"]:focus,
+input[type="tel"]:focus,
+input[type="email"]:focus,
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-light);
+}
+
+input[type="text"].invalid,
+input[type="tel"].invalid,
+input[type="email"].invalid {
+  border-color: var(--error);
+}
+
+input[type="text"].valid,
+input[type="tel"].valid,
+input[type="email"].valid {
+  border-color: var(--success);
+}
+
+.field-error {
+  color: var(--error);
+  font-size: 13px;
+  margin-top: 6px;
+  display: none;
+}
+
+.field-error.show {
+  display: block;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.radio-label,
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: normal;
+}
+
+.radio-label:hover,
+.checkbox-label:hover {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+
+.radio-label input[type="radio"],
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  cursor: pointer;
+  accent-color: var(--accent);
+}
+
+.radio-label:has(input:checked),
+.checkbox-label:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--accent-light);
+  font-weight: 600;
+}
+
+.consent-wrapper {
+  padding: 16px;
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+}
+
+.consent-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-light);
+}
+
+.button-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+button {
+  flex: 1;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+button:hover:not(:disabled) {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(15, 76, 129, 0.3);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-reset {
+  background: #6b7280;
+  flex: 0 0 auto;
+}
+
+.btn-reset:hover:not(:disabled) {
+  background: #4b5563;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #fff;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  display: none;
+}
+
+button.loading .spinner {
+  display: block;
+}
+
+button.loading .btn-text {
+  display: none;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.success-message {
+  background: var(--success);
+  color: #fff;
+  padding: 16px 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  display: none;
+  align-items: center;
+  gap: 12px;
+  animation: slideIn 0.3s ease;
+}
+
+.success-message.show {
+  display: flex;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.error-message {
+  background: #fef2f2;
+  color: var(--error);
+  padding: 14px 18px;
+  border-radius: 8px;
+  border-left: 4px solid var(--error);
+  margin-top: 20px;
+  display: none;
+  font-size: 14px;
+}
+
+.error-message.show {
+  display: block;
+  animation: slideIn 0.3s ease;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.help-text {
+  font-size: 13px;
+  color: var(--text-light);
+  margin-top: 6px;
+  font-style: italic;
+}
+
+.info-banner {
+  background: var(--accent-light);
+  border-left: 4px solid var(--accent);
+  padding: 14px 18px;
+  border-radius: 6px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  color: var(--text);
+}
+
+@media (max-width: 640px) {
+  .button-group {
+    flex-direction: column;
+  }
+  
+  .btn-reset {
+    flex: 1;
+  }
+}
